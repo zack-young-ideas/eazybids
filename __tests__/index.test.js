@@ -1,14 +1,62 @@
+import { http, delay, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+
+import { render, within, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+
 import Home from '../pages/index';
+import assignments from '../testData';
+
+const server = setupServer(
+  http.get('/api/assignments', async () => {
+    await delay(500);
+    return HttpResponse.json(assignments);
+  }),
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 describe('Home', () => {
-  it('renders a heading', () => {
+  it('displays loading spinner until data is retrieved', async () => {
     render(<Home />);
 
-    const heading = screen.getByRole('heading', { level: 1 });
+    let table = await screen.queryByRole('table');
+    let spinner = await screen.findByTestId('spinner');
 
-    expect(heading).toBeInTheDocument();
-    expect(heading).toHaveTextContent('Hello, World!');
+    // Initially, there is no table displayed.
+    expect(table).toBeNull();
+    // A spinner is displayed to indicate that the page is loading.
+    expect(spinner).toBeInTheDocument();
+
+    table = await screen.findByRole('table');
+    spinner = await screen.queryByTestId('spinner');
+
+    // Once the server responds with the data, the table is displayed.
+    expect(table).toBeInTheDocument();
+    // And the spinner is removed.
+    expect(spinner).toBeNull();
+  });
+
+  const checkRowContents = (row, firstCell, secondCell) => {
+    const columns = within(row).getAllByRole('cell');
+
+    expect(columns).toHaveLength(2);
+    expect(columns[0]).toHaveTextContent(firstCell);
+    expect(columns[1]).toHaveTextContent(secondCell);
+  };
+
+  it('fetches assignment data and displays it in table', async () => {
+    render(<Home />);
+
+    const table = await screen.findByRole('table');
+    const tbody = within(table).getAllByRole('rowgroup')[1];
+    const rows = within(tbody).getAllByRole('row');
+
+    checkRowContents(rows[0], '1001', 'Silverton');
+    checkRowContents(rows[1], '1002', 'Fairhaven');
+    checkRowContents(rows[2], '1003', 'Silverton');
+    checkRowContents(rows[3], '1004', 'Silverton');
   });
 });
