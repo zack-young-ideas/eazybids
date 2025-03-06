@@ -5,7 +5,7 @@ import { render, within, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Home from '../pages/index';
-import assignments from '../testData';
+import assignments from '../lib/placeholder-data';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {
@@ -20,7 +20,7 @@ afterAll(() => server.close());
 
 describe('Home', () => {
   it('displays loading spinner until data is retrieved', async () => {
-    render(<Home />);
+    render(<Home />)
 
     let table = await screen.queryByRole('table');
     let spinner = await screen.findByTestId('spinner');
@@ -48,15 +48,16 @@ describe('Home', () => {
   };
 
   it('fetches assignment data and displays it in table', async () => {
-    render(<Home />);
+    render(<Home />)
 
     const table = await screen.findByRole('table');
     const tbody = within(table).getAllByRole('rowgroup')[1];
     const rows = within(tbody).getAllByRole('row');
 
-    checkRowContents(rows[0], '1001', 'Silverton');
-    checkRowContents(rows[1], '1002', 'Fairhaven');
-    checkRowContents(rows[2], '1003', 'Silverton');
-    checkRowContents(rows[3], '1004', 'Silverton');
+    expect(rows.length).toBe(174);
+    checkRowContents(rows[0], '1001', 'Brookmere');
+    checkRowContents(rows[84], '1085', 'Hampton Bay');
+    checkRowContents(rows[93], '1094', 'Westford');
+    checkRowContents(rows[100], '1101', 'Northgate');
   });
 });
