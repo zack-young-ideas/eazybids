@@ -3,10 +3,13 @@ import React from 'react';
 export default function Table({ assignments }) {
   const hideSpinner = (assignments.length > 0);
 
-  const tableRows = assignments.map((item) => {
+  const tableRows = assignments.map((item, index) => {
     return (
       <tr key={item.number}>
+        <td>{index + 1}</td>
         <td>{item.number}</td>
+        <td>{item.avgWeeklyHours}</td>
+        <td>${item.avgWeeklyPay.toFixed(2)}</td>
         <td>{item.onDutyLocation}</td>
       </tr>
     );
@@ -15,7 +18,10 @@ export default function Table({ assignments }) {
     <table>
       <thead>
         <tr>
+          <th></th>
           <th>Number</th>
+          <th>Avg. Weekly Hours</th>
+          <th>Avg. Weekly Pay</th>
           <th>On-Duty Location</th>
         </tr>
       </thead>

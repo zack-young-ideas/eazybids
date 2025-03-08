@@ -29,8 +29,11 @@ describe('Home', () => {
     const thead = within(table).getAllByRole('rowgroup')[0];
     const columns = within(thead).getAllByRole('columnheader');
 
-    expect(columns).toHaveLength(2);
-    expect(columns[0]).toHaveTextContent('Number');
-    expect(columns[1]).toHaveTextContent('On-Duty Location');
+    expect(columns).toHaveLength(5);
+    expect(columns[0]).toHaveTextContent(/^$/);
+    expect(columns[1]).toHaveTextContent('Number');
+    expect(columns[2]).toHaveTextContent('Avg. Weekly Hours');
+    expect(columns[3]).toHaveTextContent('Avg. Weekly Pay');
+    expect(columns[4]).toHaveTextContent('On-Duty Location');
   });
 });
