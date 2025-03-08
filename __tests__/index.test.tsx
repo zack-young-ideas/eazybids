@@ -1,7 +1,7 @@
 import { http, delay, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
-import { render, within, fireEvent, screen } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Home from '../pages/index';
@@ -9,7 +9,7 @@ import assignments from '../lib/placeholder-data';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {
-    await delay(500);
+    await delay(1000);
     return HttpResponse.json(assignments);
   }),
 );
@@ -30,12 +30,13 @@ describe('Home', () => {
     // A spinner is displayed to indicate that the page is loading.
     expect(spinner).toBeInTheDocument();
 
-    table = await screen.findByRole('table');
-    spinner = await screen.queryByTestId('spinner');
-
     // Once the server responds with the data, the table is displayed.
-    expect(table).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('table')).toBeInTheDocument()
+    }, { timeout: 2000 });
+
     // And the spinner is removed.
+    spinner = await screen.queryByTestId('spinner');
     expect(spinner).toBeNull();
   });
 
@@ -49,6 +50,11 @@ describe('Home', () => {
 
   it('fetches assignment data and displays it in table', async () => {
     render(<Home />)
+
+    // Wait for the server to return the assignment data.
+    await waitFor(() => {
+      expect(screen.getByRole('table')).toBeInTheDocument()
+    }, { timeout: 2000 });
 
     const table = await screen.findByRole('table');
     const tbody = within(table).getAllByRole('rowgroup')[1];
