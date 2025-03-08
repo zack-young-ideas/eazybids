@@ -40,12 +40,22 @@ describe('Home', () => {
     expect(spinner).toBeNull();
   });
 
-  const checkRowContents = (row, firstCell, secondCell) => {
+  const checkRowContents = (
+    row,
+    firstCell,
+    secondCell,
+    thirdCell,
+    forthCell,
+    fifthCell
+  ) => {
     const columns = within(row).getAllByRole('cell');
 
-    expect(columns).toHaveLength(2);
+    expect(columns).toHaveLength(5);
     expect(columns[0]).toHaveTextContent(firstCell);
     expect(columns[1]).toHaveTextContent(secondCell);
+    expect(columns[2]).toHaveTextContent(thirdCell);
+    expect(columns[3]).toHaveTextContent(forthCell);
+    expect(columns[4]).toHaveTextContent(fifthCell);
   };
 
   it('fetches assignment data and displays it in table', async () => {
@@ -61,9 +71,13 @@ describe('Home', () => {
     const rows = within(tbody).getAllByRole('row');
 
     expect(rows.length).toBe(174);
-    checkRowContents(rows[0], '1001', 'Brookmere');
-    checkRowContents(rows[84], '1085', 'Hampton Bay');
-    checkRowContents(rows[93], '1094', 'Westford');
-    checkRowContents(rows[100], '1101', 'Northgate');
+    checkRowContents(rows[0], '1', '1001', '31:35', '$908.60', 'Brookmere');
+    checkRowContents(
+      rows[84], '85', '1085', '42:13', '$789.30', 'Hampton Bay'
+    );
+    checkRowContents(rows[93], '94', '1094', '43:35', '$777.76', 'Westford');
+    checkRowContents(
+      rows[100], '101', '1101', '44:41', '$802.53', 'Northgate'
+    );
   });
 });
