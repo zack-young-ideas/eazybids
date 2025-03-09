@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Table from '../components/Table';
+import Table from '../lib/ui/table';
 
 export default function Home() {
   const [assignments, setAssignments] = useState([]);

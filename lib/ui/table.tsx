@@ -1,6 +1,11 @@
 import React from 'react';
+import { Assignment } from '../definitions';
 
-export default function Table({ assignments }) {
+export default function Table({
+  assignments,
+}: {
+  assignments: Assignment[];
+}) {
   const hideSpinner = (assignments.length > 0);
 
   const tableRows = assignments.map((item, index) => {

@@ -6,15 +6,16 @@ any data from a database. Instead, it simply responds with
 the test data defined in the /lib/placeholder-data.ts file.
 */
 import type { NextApiRequest, NextApiResponse } from "next";
+import { Assignment } from '../../lib/definitions';
 import assignments from '../../lib/placeholder-data';
 
-type Data = {
-  greeting: string;
+type ApiData = {
+  assignments: Assignment[];
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<ApiData>,
 ) {
   // Artificially delay the response to simulate a real
   // server taking a few seconds to retrieve the data.
