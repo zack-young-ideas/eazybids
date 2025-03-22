@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Table from '../lib/ui/table';
+import Modal from '../lib/ui/modal';
 
 export default function Home() {
   const [assignments, setAssignments] = useState([]);
@@ -24,11 +25,7 @@ export default function Home() {
         <title>EazyBids</title>
       </Head>
 
-      <div
-        style={{ display: modalDisplay ? 'block' : 'none' }}
-        data-testid="columns-modal"
-      >
-      </div>
+      <Modal display={modalDisplay} />
 
       <button onClick={changeModal}>Columns</button>
 
