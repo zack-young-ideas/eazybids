@@ -4,6 +4,7 @@ import Table from '../lib/ui/table';
 
 export default function Home() {
   const [assignments, setAssignments] = useState([]);
+  const [modalDisplay, setModalDisplay] = useState(false);
 
   useEffect(() => {
     fetch('/api/assignments')
@@ -13,11 +14,23 @@ export default function Home() {
       });
   }, []);
 
+  const changeModal = () => {
+    setModalDisplay(!modalDisplay);
+  }
+
   return (
     <div>
       <Head>
         <title>EazyBids</title>
       </Head>
+
+      <div
+        style={{ display: modalDisplay ? 'block' : 'none' }}
+        data-testid="columns-modal"
+      >
+      </div>
+
+      <button onClick={changeModal}>Columns</button>
 
       <Table assignments={assignments} />
     </div>
