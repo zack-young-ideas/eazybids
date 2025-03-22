@@ -39,8 +39,9 @@ describe('Home', () => {
 
   it('displays columns modal when Columns button is clicked', async () => {
     render(<Home />)
+    const columnsModal = await screen.getByTestId('columns-modal');
 
-    expect(screen.getByTestId('columns-modal')).not.toBeVisible();
+    expect(columnsModal).not.toBeVisible();
 
     const columnsButton = await screen.getByRole(
       'button',
@@ -49,8 +50,28 @@ describe('Home', () => {
 
     fireEvent.click(columnsButton);
 
+    expect(columnsModal).toBeVisible();
+  });
+
+  it('closes columns modal when X button is clicked', async () => {
+    render(<Home />)
     const columnsModal = await screen.getByTestId('columns-modal');
+    const columnsButton = await screen.getByRole(
+      'button',
+      { name: /Columns/},
+    );
+
+    fireEvent.click(columnsButton);
 
     expect(columnsModal).toBeVisible();
+
+    const xButton = await screen.getByRole(
+      'button',
+      { name: /X/},
+    );
+
+    fireEvent.click(xButton);
+
+    expect(columnsModal).not.toBeVisible();
   });
 });

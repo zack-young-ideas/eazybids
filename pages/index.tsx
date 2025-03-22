@@ -25,7 +25,7 @@ export default function Home() {
         <title>EazyBids</title>
       </Head>
 
-      <Modal display={modalDisplay} />
+      <Modal display={modalDisplay} changeDisplay={changeModal} />
 
       <button onClick={changeModal}>Columns</button>
 
