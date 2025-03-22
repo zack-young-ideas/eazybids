@@ -4,7 +4,7 @@ import { Assignment } from '../definitions';
 export default function Table({
   assignments,
 }: {
-  assignments: Assignment[];
+  assignments: Assignment[],
 }) {
   const hideSpinner = (assignments.length > 0);
 

@@ -24,3 +24,10 @@ export type Assignment = {
   onDutyLocation: string;
   lines?: string[];
 };
+
+export type Column = {
+  id: string;
+  label: string;
+  checked: boolean;
+  displayed: boolean;
+};
