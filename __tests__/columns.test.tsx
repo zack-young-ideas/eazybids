@@ -9,7 +9,9 @@ import { render, fireEvent, within, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Home from '../pages/index';
+import Modal from '../lib/ui/modal';
 import assignments from '../lib/placeholder-data';
+import initialColumns from '../lib/columns';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {
@@ -73,5 +75,44 @@ describe('Home', () => {
     fireEvent.click(xButton);
 
     expect(columnsModal).not.toBeVisible();
+  });
+});
+
+describe('Modal', () => {
+  it('has default columns checked off', async () => {
+    render(<Modal
+      display={true}
+      changeDisplay={() => null}
+      columns={initialColumns}
+    />)
+    const checkedBoxes = [
+      ['All', false],
+      ['Avg. Daily Hours', false],
+      ['Individual Daily Hours', false],
+      ['Avg. Weekly Hours', true],
+      ['Individual Weekly Hours', false],
+      ['Avg. Pay Per Hour', false],
+      ['Avg. Weekly Pay', true],
+      ['Individual Weekly Pays', false],
+      ['Earliest On-Duty Time', false],
+      ['Latest On-Duty Time', false],
+      ['All On-Duty Times', false],
+      ['Earliest Off-Duty Time', false],
+      ['Latest Off-Duty Time', false],
+      ['Individual Off-Duty Times', false],
+      ['On-Duty Locations', true],
+      ['Lines', false],
+      ['Avg. Stops Per Day', false],
+      ['Individual Stops Per Day', false],
+    ];
+
+    const checkboxes = await screen.getAllByRole('checkbox')
+
+    checkedBoxes.forEach((pair) => {
+      const [ label, checked ] = pair;
+      const checkbox = screen.getByRole('checkbox', { name: label });
+
+      expect(checkbox.checked).toEqual(checked);
+    });
   });
 });
