@@ -1,6 +1,8 @@
 import React from 'react';
 import { Assignment } from '../definitions';
 
+import styles from './table.module.css';
+
 export default function Table({
   assignments,
 }: {
@@ -36,7 +38,12 @@ export default function Table({
     </table>
   );
   const spinnerContent = (
-    <div data-testid="spinner">x</div>
+    <div
+      data-testid="spinner"
+      className={styles.loadingSpinner}
+    >
+      Loading...
+    </div>
   );
 
   if (hideSpinner) {

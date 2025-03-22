@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Table from '../lib/ui/table';
 import Modal from '../lib/ui/modal';
 import initialColumns from '../lib/columns';
+import '../lib/global.css';
 
 export default function Home() {
   const [assignments, setAssignments] = useState([]);
