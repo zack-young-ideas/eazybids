@@ -32,11 +32,12 @@ export default function Home() {
         display={modalDisplay}
         changeDisplay={changeModal}
         columns={columns}
+        setColumns={setColumns}
       />
 
       <button onClick={changeModal}>Columns</button>
 
-      <Table assignments={assignments} />
+      <Table assignments={assignments} columns={columns} />
     </div>
   );
 }

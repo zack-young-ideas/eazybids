@@ -69,8 +69,8 @@ const initialColumns = [
     checked: false,
     displayed: false,
   }, {
-    id: 'onDutyLocations',
-    label: 'On-Duty Locations',
+    id: 'onDutyLocation',
+    label: 'On-Duty Location',
     checked: true,
     displayed: true,
   }, {
