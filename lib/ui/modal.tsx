@@ -1,7 +1,25 @@
 import React from 'react';
 import { Column } from '../definitions';
+import cloneDeep from 'lodash/cloneDeep';
 
-function Checkbox({ columns, index }) {
+function Checkbox({
+  columns,
+  index,
+  setColumns,
+}: {
+  columns: Column[],
+  index: string,
+  setColumns: Function,
+}) {
+  const changeColumn = () => {
+    /*
+    Updates the `checked` property of the specified Column object.
+    */
+    const newColumns = cloneDeep(columns);
+    newColumns[index].checked = !newColumns[index].checked;
+    setColumns(newColumns);
+  }
+
   return (
     <li className="flex items-center mb-4">
       <input
@@ -9,6 +27,7 @@ function Checkbox({ columns, index }) {
         defaultChecked={columns[index].checked}
         id={columns[index].id}
         name="column"
+        onChange={changeColumn}
         type="checkbox"
         value={columns[index].id}
       />
@@ -26,11 +45,18 @@ function CheckboxGroup({
   columns,
   indices,
   label,
+  setColumns,
+}: {
+  columns: Column[],
+  indices: number[],
+  label: string,
+  setColumns: Function,
 }) {
   const checkboxes = indices.map((index) => (
     <Checkbox
       columns={columns}
       index={index}
+      setColumns={setColumns}
     />
   ));
 
@@ -68,15 +94,32 @@ const checkboxGroups = [
 ];
 
 export default function Modal({
-  display, changeDisplay, columns,
+  display,
+  changeDisplay,
+  columns,
+  setColumns
 }: {
-  display: boolean, changeDisplay: Function, columns: Column[]
+  display: boolean,
+  changeDisplay: Function,
+  columns: Column[],
+  setColumns: Function,
 }) {
+  const update = () => {
+    const newColumns = cloneDeep(columns);
+    newColumns.forEach((object) => {
+      const column = object;
+      column.displayed = object.checked;
+    });
+    setColumns(newColumns);
+    changeDisplay();
+  }
+
   const groups = checkboxGroups.map((group) => (
     <CheckboxGroup
       columns={columns}
       indices={group.indices}
       label={group.label}
+      setColumns={setColumns}
     />
   ));
 
@@ -134,6 +177,7 @@ export default function Modal({
           >
             <button
               className="cursor-pointer text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-500 dark:focus:ring-green-600"
+              onClick={update}
             >
               Update
             </button>

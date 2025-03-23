@@ -1,40 +1,76 @@
 import React from 'react';
-import { Assignment } from '../definitions';
+import { Assignment, Column } from '../definitions';
 
 import styles from './table.module.css';
 
-export default function Table({
+function CrewTableHead({ columns }: { columns: Column[] }) {
+  const columnNames = columns.filter((column) => column.displayed)
+    .map((column) => <th>{column.label}</th>);
+
+  return (
+    <thead>
+      <tr>
+        <th></th>
+        <th>Number</th>
+        {columnNames}
+      </tr>
+    </thead>
+  );
+}
+
+function CrewTableBody({
   assignments,
+  columns,
 }: {
   assignments: Assignment[],
+  columns: Column[],
+}) {
+  const rows = assignments.map((assignment, index) => {
+    const columnData = columns.filter((column) => column.displayed)
+      .map((column) => {
+        if (column.id === 'avgWeeklyPay') {
+          return (<td>${assignment[column.id].toFixed(2)}</td>);
+        }
+        if (column.id === 'avgPayPerHour') {
+          return (<td>${assignment[column.id].toFixed(2)}</td>);
+        }
+        if (column.id === 'allWeeklyPays') {
+          return (<td>{
+            assignment[column.id].map((amount) => `$${amount.toFixed(2)}`)
+              .join(', ')
+          }</td>);
+        }
+        return (<td>{assignment[column.id]}</td>);
+      });
+    return (
+      <tr key={index}>
+        <td>{index + 1}</td>
+        <td>{assignment.number}</td>
+        {columnData}
+      </tr>
+    )
+  });
+
+  return (
+    <tbody>
+      {rows}
+    </tbody>
+  );
+}
+
+export default function Table({
+  assignments,
+  columns,
+}: {
+  assignments: Assignment[],
+  columns: Column[],
 }) {
   const hideSpinner = (assignments.length > 0);
 
-  const tableRows = assignments.map((item, index) => {
-    return (
-      <tr key={item.number}>
-        <td>{index + 1}</td>
-        <td>{item.number}</td>
-        <td>{item.avgWeeklyHours}</td>
-        <td>${item.avgWeeklyPay.toFixed(2)}</td>
-        <td>{item.onDutyLocation}</td>
-      </tr>
-    );
-  });
   const tableContent = (
     <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Number</th>
-          <th>Avg. Weekly Hours</th>
-          <th>Avg. Weekly Pay</th>
-          <th>On-Duty Location</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tableRows}
-      </tbody>
+      <CrewTableHead columns={columns} />
+      <CrewTableBody columns={columns} assignments={assignments} />
     </table>
   );
   const spinnerContent = (

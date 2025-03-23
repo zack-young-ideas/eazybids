@@ -69,12 +69,69 @@ describe('Home', () => {
 
     const xButton = await screen.getByRole(
       'button',
-      { name: /X/},
+      { name: /\u{D7}/u},
     );
 
     fireEvent.click(xButton);
 
     expect(columnsModal).not.toBeVisible();
+  });
+
+  it('allows user to select new columns', async () => {
+    render(<Home />)
+
+    let table = await screen.findByRole('table')
+    let thead = within(table).getAllByRole('rowgroup')[0];
+    let columns = within(thead).getAllByRole('columnheader');
+
+    expect(columns).toHaveLength(5);
+    expect(columns[0]).toHaveTextContent(/^$/);
+    expect(columns[1]).toHaveTextContent('Number');
+    expect(columns[2]).toHaveTextContent('Avg. Weekly Hours');
+    expect(columns[3]).toHaveTextContent('Avg. Weekly Pay');
+    expect(columns[4]).toHaveTextContent('On-Duty Location');
+
+    const columnsButton = await screen.getByRole(
+      'button',
+      { name: /Columns/},
+    );
+    fireEvent.click(columnsButton);
+    const columnsModal = await screen.getByTestId('columns-modal');
+
+    expect(columnsModal).toBeVisible();
+
+    let firstCheckbox = screen.getByRole(
+      'checkbox',
+      { name: 'Earliest On-Duty Time' }
+    );
+    let secondCheckbox = screen.getByRole(
+      'checkbox',
+      { name: 'Latest Off-Duty Time' }
+    );
+    let thirdCheckbox = screen.getByRole(
+      'checkbox',
+      { name: 'Avg. Weekly Hours' }
+    );
+    const updateButton = await screen.getByRole(
+      'button',
+      { name: /Update/},
+    );
+    fireEvent.click(firstCheckbox);
+    fireEvent.click(secondCheckbox);
+    fireEvent.click(thirdCheckbox);
+    fireEvent.click(updateButton);
+
+    table = await screen.findByRole('table')
+    thead = within(table).getAllByRole('rowgroup')[0];
+    columns = within(thead).getAllByRole('columnheader');
+
+    expect(columns).toHaveLength(6);
+    expect(columns[0]).toHaveTextContent(/^$/);
+    expect(columns[1]).toHaveTextContent('Number');
+    expect(columns[2]).toHaveTextContent('Avg. Weekly Pay');
+    expect(columns[3]).toHaveTextContent('Earliest On-Duty Time');
+    expect(columns[4]).toHaveTextContent('Latest Off-Duty Time');
+    expect(columns[5]).toHaveTextContent('On-Duty Location');
   });
 });
 
@@ -100,7 +157,7 @@ describe('Modal', () => {
       ['Earliest Off-Duty Time', false],
       ['Latest Off-Duty Time', false],
       ['Individual Off-Duty Times', false],
-      ['On-Duty Locations', true],
+      ['On-Duty Location', true],
       ['Lines', false],
       ['Avg. Stops Per Day', false],
       ['Individual Stops Per Day', false],
