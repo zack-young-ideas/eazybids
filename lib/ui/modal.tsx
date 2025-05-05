@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Column } from '../definitions';
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -24,7 +24,7 @@ function Checkbox({
     <li className="flex items-center mb-4">
       <input
         className="cursor-pointer w-4 h-4 accent-green-600 text-green-500 bg-gray-100 border-gray-300 rounded-sm focus:ring-green-500 dark:focus-ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-        defaultChecked={columns[index].checked}
+        checked={columns[index].checked}
         id={columns[index].id}
         name="column"
         onChange={changeColumn}
@@ -104,6 +104,27 @@ export default function Modal({
   columns: Column[],
   setColumns: Function,
 }) {
+  const [all, setAll] = useState(false);
+
+  const clickAll = () => {
+    /*
+    Selects all columns.
+    */
+    const newColumns = cloneDeep(columns);
+    if (all) {
+      setAll(false);
+      newColumns.forEach((object) => {
+        object.checked = false;
+      });
+    } else {
+      setAll(true);
+      newColumns.forEach((object) => {
+        object.checked = true;
+      });
+    }
+    setColumns(newColumns);
+  }
+
   const update = () => {
     const newColumns = cloneDeep(columns);
     newColumns.forEach((object) => {
@@ -156,9 +177,10 @@ export default function Modal({
               <li className="flex items-center mb-4">
                 <input
                   className="cursor-pointer w-4 h-4 accent-green-600 text-green-500 bg-gray-100 border-gray-300 rounded-sm focus:ring-green-500 dark:focus-ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  defaultChecked={false}
+                  checked={all}
                   id="all-checkbox"
                   name="column"
+                  onChange={clickAll}
                   type="checkbox"
                   value="all"
                 />

@@ -157,4 +157,22 @@ describe('Modal', () => {
       expect(checkbox.checked).toEqual(checked);
     });
   });
+
+  it('allows user to select all columns', async () => {
+    const mockSetColumns = jest.fn();
+    render(<Modal
+      display={true}
+      changeDisplay={() => null}
+      columns={initialColumns}
+      setColumns={mockSetColumns}
+    />)
+
+    let checkboxes = await screen.getAllByRole('checkbox')
+
+    fireEvent.click(checkboxes[0]);
+
+    mockSetColumns.mock.calls[0][0].forEach((column) => {
+      expect(column.checked).toEqual(true);
+    });
+  });
 });
