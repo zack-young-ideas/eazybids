@@ -5,7 +5,7 @@ import styles from './table.module.css';
 
 function CrewTableHead({ columns }: { columns: Column[] }) {
   const columnNames = columns.filter((column) => column.displayed)
-    .map((column) => <th>{column.label}</th>);
+    .map((column) => <th key={column.id}>{column.label}</th>);
 
   return (
     <thead>
@@ -29,18 +29,22 @@ function CrewTableBody({
     const columnData = columns.filter((column) => column.displayed)
       .map((column) => {
         if (column.id === 'avgWeeklyPay') {
-          return (<td>${assignment[column.id].toFixed(2)}</td>);
+          return (<td key={column.id}>${
+            assignment[column.id].toFixed(2)
+          }</td>);
         }
         if (column.id === 'avgPayPerHour') {
-          return (<td>${assignment[column.id].toFixed(2)}</td>);
+          return (<td key={column.id}>${
+            assignment[column.id].toFixed(2)
+          }</td>);
         }
         if (column.id === 'allWeeklyPays') {
-          return (<td>{
+          return (<td key={column.id}>{
             assignment[column.id].map((amount) => `$${amount.toFixed(2)}`)
               .join(', ')
           }</td>);
         }
-        return (<td>{assignment[column.id]}</td>);
+        return (<td key={column.id}>{assignment[column.id]}</td>);
       });
     return (
       <tr key={index}>
