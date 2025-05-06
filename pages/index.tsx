@@ -7,6 +7,7 @@ import '../lib/global.css';
 
 export default function Home() {
   const [assignments, setAssignments] = useState([]);
+  const [modalContent, setModalContent] = useState('filters');
   const [modalDisplay, setModalDisplay] = useState(false);
   const [columns, setColumns] = useState(initialColumns);
 
@@ -18,8 +19,17 @@ export default function Home() {
       });
   }, []);
 
-  const changeModal = () => {
-    setModalDisplay(!modalDisplay);
+  const showModal = () => {
+    setModalDisplay(true);
+  }
+
+  const hideModal = () => {
+    setModalDisplay(false);
+  }
+
+  const displayModalContent = (content) => {
+    setModalContent(content);
+    showModal();
   }
 
   return (
@@ -29,13 +39,23 @@ export default function Home() {
       </Head>
 
       <Modal
-        display={modalDisplay}
-        changeDisplay={changeModal}
+        modalContent={modalContent}
+        modalDisplay={modalDisplay}
+        hideModal={hideModal}
         columns={columns}
         setColumns={setColumns}
       />
 
-      <button onClick={changeModal}>Columns</button>
+      <button
+        onClick={() => displayModalContent('filters')}
+      >
+        Filters
+      </button>
+      <button
+        onClick={() => displayModalContent('columns')}
+      >
+        Columns
+      </button>
 
       <Table assignments={assignments} columns={columns} />
     </div>

@@ -26,9 +26,10 @@ afterAll(() => server.close());
 describe('Home', () => {
   it('displays columns modal when Columns button is clicked', async () => {
     render(<Home />)
-    const columnsModal = await screen.getByTestId('columns-modal');
 
-    expect(columnsModal).not.toBeVisible();
+    const modal = await screen.getByTestId('modal');
+
+    expect(modal).not.toBeVisible();
 
     const columnsButton = await screen.getByRole(
       'button',
@@ -37,12 +38,13 @@ describe('Home', () => {
 
     fireEvent.click(columnsButton);
 
-    expect(columnsModal).toBeVisible();
+    expect(modal).toBeVisible();
   });
 
   it('closes columns modal when X button is clicked', async () => {
     render(<Home />)
-    const columnsModal = await screen.getByTestId('columns-modal');
+
+    const modal = await screen.getByTestId('modal');
     const columnsButton = await screen.getByRole(
       'button',
       { name: /Columns/},
@@ -50,7 +52,7 @@ describe('Home', () => {
 
     fireEvent.click(columnsButton);
 
-    expect(columnsModal).toBeVisible();
+    expect(modal).toBeVisible();
 
     const xButton = await screen.getByRole(
       'button',
@@ -59,7 +61,7 @@ describe('Home', () => {
 
     fireEvent.click(xButton);
 
-    expect(columnsModal).not.toBeVisible();
+    expect(modal).not.toBeVisible();
   });
 
   it('allows user to select new columns', async () => {
@@ -81,9 +83,9 @@ describe('Home', () => {
       { name: /Columns/},
     );
     fireEvent.click(columnsButton);
-    const columnsModal = await screen.getByTestId('columns-modal');
+    const modal = await screen.getByTestId('modal');
 
-    expect(columnsModal).toBeVisible();
+    expect(modal).toBeVisible();
 
     let firstCheckbox = screen.getByRole(
       'checkbox',
@@ -118,15 +120,49 @@ describe('Home', () => {
     expect(columns[4]).toHaveTextContent('Latest Off-Duty Time');
     expect(columns[5]).toHaveTextContent('On-Duty Location');
   });
+
+  it('allows user to select all columns', async () => {
+    render(<Home />)
+
+    const columnsButton = await screen.getByRole(
+      'button',
+      { name: /Columns/},
+    );
+    fireEvent.click(columnsButton);
+    const modal = await screen.getByTestId('modal');
+
+    expect(modal).toBeVisible();
+
+    let allCheckbox = screen.getByRole(
+      'checkbox',
+      { name: 'All' }
+    );
+    fireEvent.click(allCheckbox);
+
+    const checkboxes = await screen.getAllByRole('checkbox')
+
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox.checked).toEqual(true);
+    });
+
+    fireEvent.click(allCheckbox);
+
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox.checked).toEqual(false);
+    });
+  });
 });
 
 describe('Modal', () => {
   it('has default columns checked off', async () => {
     render(<Modal
-      display={true}
-      changeDisplay={() => null}
       columns={initialColumns}
+      hideModal={() => null}
+      modalContent={'columns'}
+      modalDisplay={true}
+      setColumns={() => null}
     />)
+
     const checkedBoxes = [
       ['All', false],
       ['Avg. Daily Hours', false],
@@ -148,8 +184,6 @@ describe('Modal', () => {
       ['Individual Stops Per Day', false],
     ];
 
-    const checkboxes = await screen.getAllByRole('checkbox')
-
     checkedBoxes.forEach((pair) => {
       const [ label, checked ] = pair;
       const checkbox = screen.getByRole('checkbox', { name: label });
@@ -161,15 +195,18 @@ describe('Modal', () => {
   it('allows user to select all columns', async () => {
     const mockSetColumns = jest.fn();
     render(<Modal
-      display={true}
-      changeDisplay={() => null}
       columns={initialColumns}
+      hideModal={() => null}
+      modalContent={'columns'}
+      modalDisplay={true}
       setColumns={mockSetColumns}
     />)
 
-    let checkboxes = await screen.getAllByRole('checkbox')
-
-    fireEvent.click(checkboxes[0]);
+    let allCheckbox = screen.getByRole(
+      'checkbox',
+      { name: 'All' }
+    );
+    fireEvent.click(allCheckbox);
 
     mockSetColumns.mock.calls[0][0].forEach((column) => {
       expect(column.checked).toEqual(true);
