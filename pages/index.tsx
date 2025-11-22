@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Table from '../lib/ui/table';
-import Modal from '../lib/ui/modal';
-import initialColumns from '../lib/columns';
+import TopButtons from '@/lib/ui/topButtons';
+import Table from '@/lib/ui/table';
+import Modal from '@/lib/ui/modal';
+import initialColumns from '@/lib/columns';
 
 export default function Home() {
   const [assignments, setAssignments] = useState([]);
@@ -45,16 +46,7 @@ export default function Home() {
         setColumns={setColumns}
       />
 
-      <button
-        onClick={() => displayModalContent('filters')}
-      >
-        Filters
-      </button>
-      <button
-        onClick={() => displayModalContent('columns')}
-      >
-        Columns
-      </button>
+      <TopButtons displayModalContent={displayModalContent} />
 
       <Table assignments={assignments} columns={columns} />
     </div>

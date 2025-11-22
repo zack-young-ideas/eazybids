@@ -5,13 +5,15 @@ import styles from './table.module.css';
 
 function CrewTableHead({ columns }: { columns: Column[] }) {
   const columnNames = columns.filter((column) => column.displayed)
-    .map((column) => <th key={column.id}>{column.label}</th>);
+    .map((column) => (
+      <th className="px-3 py-1" key={column.id}>{column.label}</th>
+    ));
 
   return (
-    <thead>
+    <thead className="bg-lime-600 text-white">
       <tr>
-        <th></th>
-        <th>Number</th>
+        <th className="px-3 py-1"></th>
+        <th className="px-3 py-1">Number</th>
         {columnNames}
       </tr>
     </thead>
@@ -29,27 +31,34 @@ function CrewTableBody({
     const columnData = columns.filter((column) => column.displayed)
       .map((column) => {
         if (column.id === 'avgWeeklyPay') {
-          return (<td key={column.id}>${
+          return (<td className="px-3 py-1" key={column.id}>${
             assignment[column.id].toFixed(2)
           }</td>);
         }
         if (column.id === 'avgPayPerHour') {
-          return (<td key={column.id}>${
+          return (<td className="px-3 py-1" key={column.id}>${
             assignment[column.id].toFixed(2)
           }</td>);
         }
         if (column.id === 'allWeeklyPays') {
-          return (<td key={column.id}>{
+          return (<td className="px-3 py-1" key={column.id}>{
             assignment[column.id].map((amount) => `$${amount.toFixed(2)}`)
               .join(', ')
           }</td>);
         }
-        return (<td key={column.id}>{assignment[column.id]}</td>);
+        return (
+          <td
+            className="px-3 py-1"
+            key={column.id}
+          >
+            {assignment[column.id]}
+          </td>
+        );
       });
     return (
-      <tr key={index}>
-        <td>{index + 1}</td>
-        <td>{assignment.number}</td>
+      <tr className="bg-neutral-primary border-b border-gray-100" key={index}>
+        <td className="px-3 py-1">{index + 1}</td>
+        <td className="px-3 py-1">{assignment.number}</td>
         {columnData}
       </tr>
     )
@@ -72,7 +81,7 @@ export default function Table({
   const hideSpinner = (assignments.length > 0);
 
   const tableContent = (
-    <table>
+    <table className="text-left w-full">
       <CrewTableHead columns={columns} />
       <CrewTableBody columns={columns} assignments={assignments} />
     </table>

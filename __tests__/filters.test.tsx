@@ -33,7 +33,7 @@ describe('Home', () => {
 
     const filtersButton = await screen.getByRole(
       'button',
-      { name: /Filters/},
+      { name: /Filter/},
     );
 
     fireEvent.click(filtersButton);
@@ -50,7 +50,7 @@ describe('Home', () => {
 
     const filtersButton = await screen.getByRole(
       'button',
-      { name: /Filters/},
+      { name: /Filter/},
     );
 
     fireEvent.click(filtersButton);
