@@ -40,4 +40,30 @@ describe('Home', () => {
 
     expect(filtersModal).toBeVisible();
   });
+
+  it('closes filters modal when X button is clicked', async () => {
+    render(<Home />)
+
+    const filtersModal = await screen.getByTestId('modal');
+
+    expect(filtersModal).not.toBeVisible();
+
+    const filtersButton = await screen.getByRole(
+      'button',
+      { name: /Filters/},
+    );
+
+    fireEvent.click(filtersButton);
+
+    expect(filtersModal).toBeVisible();
+
+    const xButton = await screen.getByRole(
+      'button',
+      { name: /\u{D7}/u},
+    );
+
+    fireEvent.click(xButton);
+
+    expect(filtersModal).not.toBeVisible();
+  });
 });
