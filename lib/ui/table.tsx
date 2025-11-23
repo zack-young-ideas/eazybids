@@ -46,6 +46,11 @@ function CrewTableBody({
               .join(', ')
           }</td>);
         }
+        if (column.id.startsWith('all')) {
+          return (<td className="px-3 py-1" key={column.id}>{
+            assignment[column.id].join(', ')
+          }</td>);
+        }
         return (
           <td
             className="px-3 py-1"
