@@ -9,9 +9,7 @@ import { render, fireEvent, within, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Home from '../pages/index';
-import Modal from '../lib/ui/modal';
 import assignments from '../lib/placeholder-data';
-import initialColumns from '../lib/columns';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {
@@ -24,7 +22,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('Home', () => {
-  it('displays filters modal when Filters button is clicked', async () => {
+  it('displays filters modal when Filter button is clicked', async () => {
     render(<Home />)
 
     const filtersModal = await screen.getByTestId('modal');
@@ -33,7 +31,7 @@ describe('Home', () => {
 
     const filtersButton = await screen.getByRole(
       'button',
-      { name: /Filter/},
+      { name: /Filter/ },
     );
 
     fireEvent.click(filtersButton);
@@ -50,7 +48,7 @@ describe('Home', () => {
 
     const filtersButton = await screen.getByRole(
       'button',
-      { name: /Filter/},
+      { name: /Filter/ },
     );
 
     fireEvent.click(filtersButton);
@@ -59,7 +57,7 @@ describe('Home', () => {
 
     const xButton = await screen.getByRole(
       'button',
-      { name: /\u{D7}/u},
+      { name: /\u{D7}/u },
     );
 
     fireEvent.click(xButton);
