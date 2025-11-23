@@ -9,7 +9,7 @@
     "lint": "next lint",
     "test": "jest",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "deploy": "gh-pages --nojekyll -d out"
   },
   "dependencies": {
     "next": "^15.5.6",
