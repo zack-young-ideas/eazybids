@@ -1,12 +1,20 @@
-import sorts from '@/lib/commands/sorts.ts';
+import sorts, { Sort } from '@/lib/commands/sorts';
+import { CommandArguments } from '@/lib/definitions';
 
-function SortDisplayContent({
+interface SortDisplayContentProps {
+  setSort: (sort: string | null) => void;
+  setSortDirection: (sortDirection: string) => void;
+}
+
+const SortDisplayContent: React.FC<SortDisplayContentProps> = ({
   setSort,
   setSortDirection,
-}) {
-  const sortComponents = Object.getOwnPropertyNames(sorts).map(
+}) => {
+  const sortComponents = (
+    Object.getOwnPropertyNames(sorts) as (keyof typeof sorts)[]
+  ).map(
     (name, index) => {
-      const sortObject = sorts[name];
+      const sortObject: Sort = sorts[name];
       return (
         <li
           className="px-3 py-2"
@@ -101,12 +109,19 @@ function SortDisplayContent({
   );
 }
 
-function SortModalFooter({
+interface SortModalFooterProps {
+  applyCommand: (commandType: string, commandArgs: CommandArguments) => void;
+  hideModal: () => void;
+  selectedSort: string | null;
+  sortDirection: string;
+}
+
+const SortModalFooter: React.FC<SortModalFooterProps> = ({
   applyCommand,
   hideModal,
   selectedSort,
   sortDirection,
-}) {
+}) => {
   const submit = () => {
     applyCommand('sort', { selectedSort, sortDirection });
     hideModal();

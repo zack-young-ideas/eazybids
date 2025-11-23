@@ -1,5 +1,5 @@
 import React from 'react';
-import { Assignment, Column } from '../definitions';
+import { Assignment, Column } from '@/lib/definitions';
 
 import styles from './table.module.css';
 
@@ -31,25 +31,37 @@ function CrewTableBody({
     const columnData = columns.filter((column) => column.displayed)
       .map((column) => {
         if (column.id === 'avgWeeklyPay') {
-          return (<td className="px-3 py-1" key={column.id}>${
-            assignment[column.id].toFixed(2)
-          }</td>);
+          const value = assignment[column.id];
+          if (typeof value === 'number') {
+            return (<td className="px-3 py-1" key={column.id}>${
+              value.toFixed(2)
+            }</td>);
+          }
         }
         if (column.id === 'avgPayPerHour') {
-          return (<td className="px-3 py-1" key={column.id}>${
-            assignment[column.id].toFixed(2)
-          }</td>);
+          const value = assignment[column.id];
+          if (typeof value === 'number') {
+            return (<td className="px-3 py-1" key={column.id}>${
+              value.toFixed(2)
+            }</td>);
+          }
         }
         if (column.id === 'allWeeklyPays') {
-          return (<td className="px-3 py-1" key={column.id}>{
-            assignment[column.id].map((amount) => `$${amount.toFixed(2)}`)
-              .join(', ')
-          }</td>);
+          const value = assignment[column.id];
+          if (Array.isArray(value)) {
+            return (<td className="px-3 py-1" key={column.id}>{
+              value.map((amount) => `$${amount.toFixed(2)}`)
+                .join(', ')
+            }</td>);
+          }
         }
         if (column.id.startsWith('all')) {
-          return (<td className="px-3 py-1" key={column.id}>{
-            assignment[column.id].join(', ')
-          }</td>);
+          const value = assignment[column.id];
+          if (Array.isArray(value)) {
+            return (<td className="px-3 py-1" key={column.id}>{
+              value.join(', ')
+            }</td>);
+          }
         }
         return (
           <td

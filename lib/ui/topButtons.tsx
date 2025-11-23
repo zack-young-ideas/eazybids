@@ -11,10 +11,13 @@ import {
   FaUndo,
 } from 'react-icons/fa';
 
-export default function TopButtons({
-  displayModalContent,
-}) {
+interface TopButtonsProps {
+  displayModalContent: (content: string) => void;
+}
 
+const TopButtons: React.FC<TopButtonsProps> = ({
+  displayModalContent,
+}) => {
   return (
     <div>
       <div className="bg-zinc-100 flex w-full">
@@ -102,3 +105,5 @@ export default function TopButtons({
     </div>
   );
 }
+
+export default TopButtons;

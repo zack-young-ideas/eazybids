@@ -4,21 +4,28 @@ import TopButtons from '@/lib/ui/topButtons';
 import Table from '@/lib/ui/table';
 import Modal from '@/lib/ui/modal';
 import initialColumns from '@/lib/columns';
-import sorts from '@/lib/commands/sorts.ts';
+import sorts from '@/lib/commands/sorts';
 import assignments from '@/lib/placeholder-data';
+import { Assignment, CommandArguments } from '@/lib/definitions';
 
 export default function Home() {
-  const [ogAssignments, setAssignments] = useState([]);
-  const [currentList, setCurrentList] = useState([]);
+  const [currentList, setCurrentList] = useState<Assignment[]>([]);
   const [modalContent, setModalContent] = useState('filters');
   const [modalDisplay, setModalDisplay] = useState(false);
   const [columns, setColumns] = useState(initialColumns);
 
   useEffect(() => {
-    setTimeout(() => {
-      setAssignments(assignments.assignments);
-      setCurrentList(assignments.assignments);
-    }, 2000);
+    if (process.env.NEXT_PUBLIC_DEMO === 'true') {
+      setTimeout(() => {
+        setCurrentList(assignments.assignments);
+      }, 2000);
+    } else {
+      fetch('/api/assignments')
+        .then((response) => response.json())
+        .then((object) => {
+          setCurrentList(object.assignments);
+        });
+    }
   }, []);
 
   const showModal = () => {
@@ -29,17 +36,26 @@ export default function Home() {
     setModalDisplay(false);
   }
 
-  const displayModalContent = (content) => {
+  const displayModalContent = (content: string) => {
     setModalContent(content);
     showModal();
   }
 
-  const applyCommand = (commandType, commandArgs) => {
+  const applyCommand = (
+    commandType: string,
+    commandArgs: CommandArguments
+  ) => {
     switch (commandType) {
       case 'sort':
-        const sortClass = sorts[commandArgs.selectedSort]._class;
-        const sortObject = new sortClass(commandArgs.sortDirection);
-        setCurrentList(sortObject.updateList(currentList));
+        if ((commandArgs.selectedSort !== null)
+            && (commandArgs.sortDirection !== null)
+        ) {
+          const sortClass = sorts[
+            commandArgs.selectedSort as (keyof typeof sorts)
+          ]._class;
+          const sortObject = new sortClass(commandArgs.sortDirection);
+          setCurrentList(sortObject.updateList(currentList));
+        }
         break;
     }
   }

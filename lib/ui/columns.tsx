@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
+import { Column } from '@/lib/definitions';
 
-function Checkbox({
+interface ColumnsDisplayContentProps {
+  columns: Column[];
+  setColumns: (columns: Column[]) => void;
+}
+
+interface CheckboxProps extends ColumnsDisplayContentProps {
+  index: number;
+}
+
+interface CheckboxGroupProps extends ColumnsDisplayContentProps {
+  indices: number[];
+  label: string;
+}
+
+const Checkbox: React.FC<CheckboxProps>  = ({
   columns,
   index,
-  setColumns,
-}) {
+  setColumns
+}) => {
   const changeColumn = () => {
     /*
     Updates the `checked` property of the specified Column object.
@@ -36,12 +51,12 @@ function Checkbox({
   );
 }
 
-function CheckboxGroup({
+const CheckboxGroup: React.FC<CheckboxGroupProps>  = ({
   columns,
   indices,
   label,
-  setColumns,
-}) {
+  setColumns
+}) => {
   const checkboxes = indices.map((index) => (
     <Checkbox
       columns={columns}
@@ -84,10 +99,10 @@ const checkboxGroups = [
   },
 ];
 
-export default function ColumnsDisplayContent({
+const ColumnsDisplayContent: React.FC<ColumnsDisplayContentProps>  = ({
   columns,
-  setColumns
-}) {
+  setColumns,
+}) => {
   const [all, setAll] = useState(false);
 
   const clickAll = () => {
@@ -144,3 +159,5 @@ export default function ColumnsDisplayContent({
     </div>
   );
 }
+
+export default ColumnsDisplayContent;

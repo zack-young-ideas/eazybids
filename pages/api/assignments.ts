@@ -6,8 +6,8 @@ any data from a database. Instead, it simply responds with
 the test data defined in the /lib/placeholder-data.ts file.
 */
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Assignment } from '../../lib/definitions';
-import assignments from '../../lib/placeholder-data';
+import { Assignment } from '@/lib/definitions';
+import assignments from '@/lib/placeholder-data';
 
 type ApiData = {
   assignments: Assignment[];

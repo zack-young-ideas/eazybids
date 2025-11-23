@@ -23,11 +23,37 @@ export type Assignment = {
   allStopsPerDay?: number[];
   onDutyLocation: string;
   lines?: string[];
+  [key: string]: string | string[] | number | number[] | boolean | undefined;
 };
 
+type AssignmentProperties =
+  | 'avgDailyHours'
+  | 'allDailyHours'
+  | 'avgWeeklyHours'
+  | 'allWeeklyHours'
+  | 'avgPayPerHour'
+  | 'avgWeeklyPay'
+  | 'allWeeklyPays'
+  | 'earliestOnDutyTime'
+  | 'latestOnDutyTime'
+  | 'allOnDutyTimes'
+  | 'earliestOffDutyTime'
+  | 'latestOffDutyTime'
+  | 'allOffDutyTimes'
+  | 'containsSplit'
+  | 'spareboard'
+  | 'avgStopsPerDay'
+  | 'allStopsPerDay'
+  | 'onDutyLocation'
+  | 'lines';
+
 export type Column = {
-  id: string;
+  id: string | AssignmentProperties;
   label: string;
   checked: boolean;
   displayed: boolean;
 };
+
+export type CommandArguments = {
+  [key: string]: string | null;
+}

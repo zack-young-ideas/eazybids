@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
-import ColumnsDisplayContent from './columns.tsx';
-import { SortDisplayContent, SortModalFooter } from './sort.tsx';
+import ColumnsDisplayContent from './columns';
+import { SortDisplayContent, SortModalFooter } from './sort';
+import { Column, CommandArguments } from '@/lib/definitions';
 
-export default function Modal({
+interface ModalProps {
+  applyCommand: (commandType: string, commandArgs: CommandArguments) => void;
+  columns: Column[];
+  hideModal: () => void;
+  modalContent: string;
+  modalDisplay: boolean;
+  setColumns: (columns: Column[]) => void;
+}
+
+const Modal: React.FC<ModalProps> = ({
   applyCommand,
   columns,
   hideModal,
   modalContent,
   modalDisplay,
   setColumns
-}) {
-  const [sort, setSort] = useState(null);
-  const [sortDirection, setSortDirection] = useState('ascending');
+}) => {
+  const [sort, setSort] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<string>('ascending');
 
   const update = () => {
     const newColumns = cloneDeep(columns);
@@ -33,7 +43,6 @@ export default function Modal({
       content = (
         <ColumnsDisplayContent
           columns={columns}
-          hideModal={hideModal}
           setColumns={setColumns}
         />
       );
@@ -117,3 +126,5 @@ export default function Modal({
     </div>
   );
 }
+
+export default Modal;
