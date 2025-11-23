@@ -8,8 +8,8 @@ import { setupServer } from 'msw/node';
 import { render, fireEvent, within, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import Home from '../pages/index';
-import assignments from '../lib/placeholder-data';
+import Home from '@/pages/index';
+import assignments from '@/lib/placeholder-data';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {

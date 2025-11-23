@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
-import { Column } from '../definitions';
 import cloneDeep from 'lodash/cloneDeep';
 
 function Checkbox({
   columns,
   index,
   setColumns,
-}: {
-  columns: Column[],
-  index: string,
-  setColumns: Function,
 }) {
   const changeColumn = () => {
     /*
@@ -46,11 +41,6 @@ function CheckboxGroup({
   indices,
   label,
   setColumns,
-}: {
-  columns: Column[],
-  indices: number[],
-  label: string,
-  setColumns: Function,
 }) {
   const checkboxes = indices.map((index) => (
     <Checkbox
@@ -97,9 +87,6 @@ const checkboxGroups = [
 export default function ColumnsDisplayContent({
   columns,
   setColumns
-}: {
-  columns: Column[],
-  setColumns: Function,
 }) {
   const [all, setAll] = useState(false);
 

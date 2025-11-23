@@ -4,8 +4,9 @@ import { setupServer } from 'msw/node';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import Home from '../pages/index';
-import assignments from '../lib/placeholder-data';
+import Home from '@/pages/index';
+import assignments from '@/lib/placeholder-data';
+import { checkRowContents } from '@/__tests__/utils.ts';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {
@@ -39,24 +40,6 @@ describe('Home', () => {
     spinner = await screen.queryByTestId('spinner');
     expect(spinner).toBeNull();
   });
-
-  const checkRowContents = (
-    row,
-    firstCell,
-    secondCell,
-    thirdCell,
-    forthCell,
-    fifthCell
-  ) => {
-    const columns = within(row).getAllByRole('cell');
-
-    expect(columns).toHaveLength(5);
-    expect(columns[0]).toHaveTextContent(firstCell);
-    expect(columns[1]).toHaveTextContent(secondCell);
-    expect(columns[2]).toHaveTextContent(thirdCell);
-    expect(columns[3]).toHaveTextContent(forthCell);
-    expect(columns[4]).toHaveTextContent(fifthCell);
-  };
 
   it('fetches assignment data and displays it in table', async () => {
     render(<Home />)

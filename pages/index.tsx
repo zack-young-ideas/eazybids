@@ -4,9 +4,11 @@ import TopButtons from '@/lib/ui/topButtons';
 import Table from '@/lib/ui/table';
 import Modal from '@/lib/ui/modal';
 import initialColumns from '@/lib/columns';
+import sorts from '@/lib/commands/sorts.ts';
 
 export default function Home() {
   const [assignments, setAssignments] = useState([]);
+  const [currentList, setCurrentList] = useState([]);
   const [modalContent, setModalContent] = useState('filters');
   const [modalDisplay, setModalDisplay] = useState(false);
   const [columns, setColumns] = useState(initialColumns);
@@ -16,6 +18,7 @@ export default function Home() {
       .then((response) => response.json())
       .then((object) => {
         setAssignments(object.assignments);
+        setCurrentList(object.assignments);
       });
   }, []);
 
@@ -32,6 +35,16 @@ export default function Home() {
     showModal();
   }
 
+  const applyCommand = (commandType, commandArgs) => {
+    switch (commandType) {
+      case 'sort':
+        const sortClass = sorts[commandArgs.selectedSort]._class;
+        const sortObject = new sortClass(commandArgs.sortDirection);
+        setCurrentList(sortObject.updateList(currentList));
+        break;
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -39,6 +52,7 @@ export default function Home() {
       </Head>
 
       <Modal
+        applyCommand={applyCommand}
         modalContent={modalContent}
         modalDisplay={modalDisplay}
         hideModal={hideModal}
@@ -48,7 +62,7 @@ export default function Home() {
 
       <TopButtons displayModalContent={displayModalContent} />
 
-      <Table assignments={assignments} columns={columns} />
+      <Table assignments={currentList} columns={columns} />
     </div>
   );
 }

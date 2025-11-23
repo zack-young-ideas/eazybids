@@ -10,7 +10,7 @@ function CrewTableHead({ columns }: { columns: Column[] }) {
     ));
 
   return (
-    <thead className="bg-lime-600 text-white">
+    <thead className="bg-green-600 text-white">
       <tr>
         <th className="px-3 py-1"></th>
         <th className="px-3 py-1">Number</th>

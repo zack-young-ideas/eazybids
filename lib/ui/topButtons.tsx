@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   FaColumns,
   FaEdit,
@@ -13,8 +13,6 @@ import {
 
 export default function TopButtons({
   displayModalContent,
-}: {
-  displayModalContent: Function,
 }) {
 
   return (
@@ -31,7 +29,7 @@ export default function TopButtons({
         </button>
         <button
           className="cursor-pointer flex-1 px-4 py-3 text-gray-600"
-          onClick={() => displayModalContent('sort')}
+          onClick={() => displayModalContent('sorts')}
         >
           <div className="flex items-center justify-center pb-2">
             <FaSortAmountDown />

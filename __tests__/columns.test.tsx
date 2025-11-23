@@ -8,10 +8,10 @@ import { setupServer } from 'msw/node';
 import { render, fireEvent, within, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import Home from '../pages/index';
-import Modal from '../lib/ui/modal';
-import assignments from '../lib/placeholder-data';
-import initialColumns from '../lib/columns';
+import Home from '@/pages/index';
+import Modal from '@/lib/ui/modal';
+import assignments from '@/lib/placeholder-data';
+import initialColumns from '@/lib/columns';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {
@@ -101,7 +101,7 @@ describe('Home', () => {
     );
     const updateButton = await screen.getByRole(
       'button',
-      { name: /Update/},
+      { name: /Update/ },
     );
     fireEvent.click(firstCheckbox);
     fireEvent.click(secondCheckbox);

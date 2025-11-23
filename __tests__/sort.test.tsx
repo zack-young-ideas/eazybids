@@ -5,11 +5,18 @@ Tests to ensure the user can sort assignments.
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
-import { render, fireEvent, within, screen } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import Home from '../pages/index';
-import assignments from '../lib/placeholder-data';
+import Home from '@/pages/index';
+import assignments from '@/lib/placeholder-data';
+import { checkRowContents } from '@/__tests__/utils.ts';
 
 const server = setupServer(
   http.get('/api/assignments', async () => {
@@ -68,6 +75,11 @@ describe('Home', () => {
   it('sorts assignments based on weekly pay', async () => {
     render(<Home />)
 
+    // We must wait for the list to be retrieved by the API server.
+    await waitFor(() => {
+      expect(screen.getByRole('table')).toBeInTheDocument()
+    }, { timeout: 2000 });
+
     const sortModal = await screen.getByTestId('modal');
     const sortButton = await screen.getByRole(
       'button',
@@ -79,7 +91,11 @@ describe('Home', () => {
 
     const sortByPay = await screen.getByRole(
       'radio',
-      { name: /Avg. Weekly Pay/ },
+      { name: 'Avg. Weekly Pay' },
+    );
+    const increasing = await screen.getByRole(
+      'radio',
+      { name: 'Increasing' },
     );
     const submitButton = await screen.getByRole(
       'button',
@@ -87,6 +103,7 @@ describe('Home', () => {
     );
 
     fireEvent.click(sortByPay);
+    fireEvent.click(increasing);
     fireEvent.click(submitButton);
 
     expect(sortModal).not.toBeVisible();

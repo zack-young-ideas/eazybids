@@ -5,9 +5,9 @@ Tests to ensure the table is rendered properly.
 import { render, fireEvent, within, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import Table from '../lib/ui/table';
-import assignments from '../lib/placeholder-data';
-import initialColumns from '../lib/columns';
+import Table from '@/lib/ui/table';
+import assignments from '@/lib/placeholder-data';
+import initialColumns from '@/lib/columns';
 
 describe('Table', () => {
   it('displays columns and assignments', async () => {

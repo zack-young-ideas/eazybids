@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import ColumnsDisplayContent from './columns.tsx';
+import { SortDisplayContent, SortModalFooter } from './sort.tsx';
 
 export default function Modal({
+  applyCommand,
   columns,
   hideModal,
   modalContent,
   modalDisplay,
   setColumns
-}: {
-  columns: Column[],
-  hideModal: Function,
-  modalContent: string,
-  modalDisplay: boolean,
-  setColumns: Function,
 }) {
+  const [sort, setSort] = useState(null);
+  const [sortDirection, setSortDirection] = useState('ascending');
+
   const update = () => {
     const newColumns = cloneDeep(columns);
     newColumns.forEach((object) => {
@@ -52,10 +51,28 @@ export default function Modal({
       );
       break;
     case 'filters':
-      title = 'Filters';
+      title = 'Filter the Assignments';
       content = <div></div>;
       footer = <div></div>;
       break;
+    case 'sorts':
+      title = 'Sort the Assignments';
+      content = (
+        <SortDisplayContent
+          setSort={setSort}
+          setSortDirection={setSortDirection}
+        />
+      );
+      footer = (
+        <SortModalFooter
+          applyCommand={applyCommand}
+          hideModal={hideModal}
+          selectedSort={sort}
+          sortDirection={sortDirection}
+        />
+      );
+      break;
+
   }
 
   return (
