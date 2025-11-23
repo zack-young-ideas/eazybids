@@ -5,21 +5,20 @@ import Table from '@/lib/ui/table';
 import Modal from '@/lib/ui/modal';
 import initialColumns from '@/lib/columns';
 import sorts from '@/lib/commands/sorts.ts';
+import assignments from '@/lib/placeholder-data';
 
 export default function Home() {
-  const [assignments, setAssignments] = useState([]);
+  const [ogAssignments, setAssignments] = useState([]);
   const [currentList, setCurrentList] = useState([]);
   const [modalContent, setModalContent] = useState('filters');
   const [modalDisplay, setModalDisplay] = useState(false);
   const [columns, setColumns] = useState(initialColumns);
 
   useEffect(() => {
-    fetch('/api/assignments')
-      .then((response) => response.json())
-      .then((object) => {
-        setAssignments(object.assignments);
-        setCurrentList(object.assignments);
-      });
+    setTimeout(() => {
+      setAssignments(assignments.assignments);
+      setCurrentList(assignments.assignments);
+    }, 2000);
   }, []);
 
   const showModal = () => {
