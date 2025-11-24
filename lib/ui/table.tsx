@@ -6,7 +6,12 @@ import styles from './table.module.css';
 function CrewTableHead({ columns }: { columns: Column[] }) {
   const columnNames = columns.filter((column) => column.displayed)
     .map((column) => (
-      <th className="px-3 py-1" key={column.id}>{column.label}</th>
+      <th
+        className="px-3 py-1 whitespace-nowrap"
+        key={column.id}
+      >
+        {column.label}
+      </th>
     ));
 
   return (
@@ -98,10 +103,12 @@ export default function Table({
   const hideSpinner = (assignments.length > 0);
 
   const tableContent = (
-    <table className="text-left w-full">
-      <CrewTableHead columns={columns} />
-      <CrewTableBody columns={columns} assignments={assignments} />
-    </table>
+    <div className="overflow-x-auto">
+      <table className="text-left w-full">
+        <CrewTableHead columns={columns} />
+        <CrewTableBody columns={columns} assignments={assignments} />
+      </table>
+    </div>
   );
   const spinnerContent = (
     <div
